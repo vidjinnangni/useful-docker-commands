@@ -1,0 +1,16 @@
+# Node / NPM / Yarn
+node_modules/
+dist/
+.env
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Docker
+**/.dockerignore
+
+# VSCode
+.vscode/
