@@ -14,16 +14,16 @@ docker ps
 docker ps -a
 
 # Show live logs from a container
-docker logs -f [container ID]
+docker logs -f <container_id>
 
 # Show processes inside a container
-docker top [container ID]
+docker top <container_id>
 
 # Kill a running container
-docker kill [container ID]
+docker kill <container_id>
 
 # Remove a container forcefully
-docker rm -f [container ID]
+docker rm -f <container_id>
 ```
 
 ## Stop & remove containers
@@ -35,19 +35,19 @@ docker stop $(docker ps -a -q)
 # Remove all containers
 docker rm -f $(docker ps -a -q)
 
-# Stop a container
-docker container stop [container ID]
+# Stop a single container
+docker container stop <container_id>
 
 # Stop all containers (alternate syntax)
 docker container stop $(docker container ls -aq)
 
-# Remove a container
-docker container rm [container ID]
+# Remove a single container
+docker container rm <container_id>
 
 # Remove all containers
 docker container rm $(docker container ls -aq)
 
-# Stop all containers and prune everything including volumes
+# Stop all containers and prune everything (including volumes)
 docker container stop $(docker container ls -aq) && docker system prune -af --volumes
 ```
 
@@ -55,13 +55,13 @@ docker container stop $(docker container ls -aq) && docker system prune -af --vo
 
 ```bah
 # Open a shell session inside a container
-docker exec -it [container ID] sh
+docker exec -it <container_id> sh
 
 # Run Magento CLI inside a container
-docker exec -it [container ID] bin/magento
+docker exec -it <container_id> bin/magento
 
 # Run Magento CLI in detached mode
-docker exec -it -d [container ID] bin/magento
+docker exec -d -it <container_id> bin/magento
 ```
 
 ## Image & system cleanup
@@ -77,17 +77,51 @@ docker image prune -a
 ## Docker compose
 
 ```bash
-# Run a one-time command in a service container
-docker-compose run --rm cli
+# Start services in the foreground (builds if needed)
+docker compose up
 
-# Run MySQL CLI in the 'db' service container
-docker-compose exec db sh -c 'mysql -u magento2 -pmagento2 magento2 "$@"'
+# Start services in detached/background mode
+docker compose up -d
+
+# Stop and remove containers, networks, and volumes
+docker compose down
+
+# Rebuild services
+docker compose up --build
+
+# Rebuild only a specific service
+docker compose up --build <service_name>
+
+# Stop services
+docker compose stop
+
+# Start stopped services
+docker compose start
+
+# View logs of all services
+docker compose logs
+
+# Follow logs (like `tail -f`)
+docker compose logs -f
+
+# Run a one-time command in a service container (without restarting everything)
+docker compose run --rm <service_name> <command>
+
+# Execute a command in a running service container
+docker compose exec <service_name> <command>
+
+# Example: Open a shell in the 'app' service
+docker compose exec app sh
+
+# Example: Run MySQL CLI inside the 'db' service
+docker compose exec db sh -c 'mysql -u magento2 -pmagento2 magento2'
 ```
 
-## PHPStan example
+## Run a container (common example)
 
 ```bash
-docker run --rm -v $PWD:/code domw/phpstan phpstan analyze --level 0
+# Start an Nginx container on port 8080
+docker run -d -p 8080:80 nginx
 ```
 
 ## See also
